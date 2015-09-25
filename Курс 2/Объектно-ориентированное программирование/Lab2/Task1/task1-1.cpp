@@ -1,6 +1,10 @@
 /*  Класс парабола представлен тремя полями a, b, c. (ax2+bx+c) .
     Реализовать метод, вычисляющий расстояние от вершины параболы до начала координат и суммирующий две параболы.
-    В результате суммирования соответствующие коэффициенты складываются. */
+    В результате суммирования соответствующие коэффициенты складываются. 
+    
+    В функции main  продемонстрировать использование одного динамического объекта,
+    а также  динамического массива объектов. 
+    Использовать new, delete, delete[] . При обращении к методам использовать (*a) и ->.  */
 
 #include <cmath>
 #include "stdio.h"
@@ -54,17 +58,21 @@ Parabola Parabola::Add(Parabola jeden, Parabola dwa)
 int main()
 {
     double distance1;
-    Parabola jeden, dwa, trzy;
-    jeden.Init(0,0,0);
-    dwa.Init(0,0,0);
+    Parabola *jeden, *multi;
+    jeden = new Parabola;       /* динамичейский объект */
+    multi = new Parabola[2];    /* динамический массив */
+    jeden->Init(0,0,0);
+    multi[0].Init(0,0,0);
     printf("Введите элементы параболы:");
-    jeden.Read();
+    jeden->Read();
     printf("Введите элементы параболы:");
-    dwa.Read();
-    distance1 = jeden.Distance();
+    multi[0].Read();
+    distance1 = jeden->Distance();
     printf("Расстояние между вершиной параболы и началом координат: %lf\n", distance1);
-    trzy = trzy.Add(jeden, dwa);
+    multi[1] = multi[1].Add(*jeden, multi[0]);
     printf("Сумма коэффицентов двух парабол:");
-    trzy.Display();
+    multi[1].Display();
+    delete(jeden);          
+    delete[] multi;
 
 }
