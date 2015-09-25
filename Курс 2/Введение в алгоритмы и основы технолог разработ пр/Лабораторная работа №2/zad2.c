@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
 
     /* считали все стеки, создаем очередь*/
     struct queue oczered;
-    queue_create(&oczered, biggest+1); /* костыль */
+    queue_create(&oczered, biggest+1); 
   for(i = 0; i < biggest; i++){
     tmp = 100500; /* костыль */
        for(j = 0; j < numofstacks; j++){
@@ -51,11 +51,8 @@ int main(int argc, char *argv[]){
                 tmp2 = stack_pop(&stacks[j]);
                if(tmp > tmp2)
                     tmp = tmp2;
-        //       printf("%d ", tmp);
             }
         }
-      // printf("\n");
-      // printf("%d ---", tmp);
        if(tmp == 100500) /* костыль */ 
            return 1;
         queue_push(&oczered, tmp);
@@ -75,11 +72,5 @@ switch (c){
     fclose(fp);
     break;
 }
-/*
-  printf("Ответ:\n");
-  for(i = 0; i < biggest; i++)
-      printf("%d\n", queue_pop(&oczered));
-   return 0; 
-   */
 }
 

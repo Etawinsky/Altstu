@@ -20,7 +20,6 @@ void queue_destroy(struct  queue *queuei)
 
 void queue_push(struct queue *queuei, int number)
 { 
-    printf("right --%d\n ", queuei->right);
     assert((queuei->right+1) % queuei->size != queuei->left);
     queuei->numbers[queuei->right] = number;
     queuei->right++;
@@ -28,7 +27,6 @@ void queue_push(struct queue *queuei, int number)
 }
 int queue_pop(struct queue *queuei)
 {
-    printf("left --%d \n", queuei->left);
     assert((queuei->left ) % queuei->size != queuei->right);    
     queuei->left++;
     queuei->left %= queuei->size ;

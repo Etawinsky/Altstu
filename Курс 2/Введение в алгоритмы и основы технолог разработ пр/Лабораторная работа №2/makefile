@@ -1,4 +1,4 @@
 all:
-	gcc zad2.c  stack.c  queue.c -o zad2
+	gcc -Wall -pedantic zad2.c  stack.c  queue.c -o zad2
 clean:
 	rm -rf *.o a.out zad2
