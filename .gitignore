@@ -3,3 +3,7 @@
 *.out
 *.swo
 *.class
+*.synctex.gz
+*.aux
+*.log
+

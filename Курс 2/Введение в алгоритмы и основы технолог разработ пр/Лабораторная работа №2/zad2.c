@@ -4,6 +4,7 @@
 #include "stack.h"
 #include "queue.h"
 #define LINELENGTH 1024 /* длина считываемой строки */
+#define MAX 2147483
 
 int main(int argc, char *argv[]){
 
@@ -19,7 +20,7 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "Нет такого файла\n");
         return 1;
     }
-    tmp = 15000; /* костыль */
+    tmp = MAX; /* костыль */
     biggest = 1;
     /* читаем строку за строкой */
     numofstacks = 0;
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]){
     struct queue oczered;
     queue_create(&oczered, biggest+1); 
   for(i = 0; i < biggest; i++){
-    tmp = 100500; /* костыль */
+    tmp = MAX; /* костыль */
        for(j = 0; j < numofstacks; j++){
             if(!is_stk_empty(&stacks[j])){
                 tmp2 = stack_pop(&stacks[j]);
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]){
                     tmp = tmp2;
             }
         }
-       if(tmp == 100500) /* костыль */ 
+       if(tmp == MAX) /* костыль */ 
            return 1;
         queue_push(&oczered, tmp);
     }
