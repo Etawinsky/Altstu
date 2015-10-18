@@ -2,19 +2,13 @@
     Определить метод вычисления среднего числа учеников, приходящихся на одного  учителя (вещественное число).
     Основным классом является районный отдел образования, в котором в подчинении 3 школы и заданное число инспекторов.
     Определить метод, вычисляющий общее число людей, 
-    занятых в образовании и школу с максимальным числом учеников на одного учителя.
-
-В первой половине массива выбрать самое длинное название, во второй самое короткое.
- Перед вторым элементом самого длинного названия вставить элементы с 3 по 5 самого короткого названия. Вывести преобразованный элемент.
- */
+    занятых в образовании и школу с максимальным числом учеников на одного учителя. */
 
 #include "stdio.h"
-#include <string>
-#include <iostream>
-using namespace std;
+#include "string.h"
 class Szkola{
     public:
-        void Init(int _studenci, int _nauczycieli);
+        void Init();
         void Read();
         void Display();
         double Srednia();
@@ -26,29 +20,31 @@ class Szkola{
 
 class Rajon{
     public:
-        string Get_Imie();           /* Получить название района */
-        void Set_Imie(string s);     /* Задать название района */
-        void Init(int s1, int n1, int s2, int n2, int s3, int n3, int _inspektory, string s);
+        char* Get_Imie();           /* Получить название района */
+        void Set_Imie();     /* Задать название района */
+        Rajon();
+        Rajon(Rajon &x);
         void Read();
         Szkola Moar();              /* Определить наибольшее число учеников в одной из трех школ */
         int  Total();
         void Display();
-    private: 
-        string imie_rajona;
+		void operator = (const Rajon &x);	
+    private:
+        char imie_rajona[30];
         int inspektory;
         Szkola Szkola1;
         Szkola Szkola2;
         Szkola Szkola3;
 };
 
-string Rajon::Get_Imie()
+char* Rajon::Get_Imie()
 {
     return imie_rajona;
 }           
 
-void Rajon::Set_Imie(string s)
+void Rajon::Set_Imie()
 {
-    imie_rajona = s;
+    scanf("%s", imie_rajona);
 }
 
 void Rajon::Read()
@@ -59,15 +55,36 @@ void Rajon::Read()
     scanf("%d", &inspektory);
 }
 
-void Rajon::Init(int s1, int n1, int s2, int n2, int s3, int n3, int _inspektory, string s)
+
+
+Rajon::Rajon()
 {
-    Szkola1.Init(s1, n1);
-    Szkola2.Init(s2, n2);
-    Szkola3.Init(s3, n3);
-    inspektory = _inspektory;
-    imie_rajona = s;
+    Szkola1.Init();
+    Szkola2.Init();
+    Szkola3.Init();
+    inspektory = 0;
+    strcpy(imie_rajona, "");
+}
+Rajon::Rajon(Rajon &x)
+{
+    this->Szkola1 = x.Szkola1;
+    this->Szkola2 = x.Szkola2;
+    this->Szkola3 = x.Szkola3;
+    this->inspektory = x.inspektory;
+	//this->imie_rajona = x.imie_rajona;
+    strcpy(this->imie_rajona, x.imie_rajona);
 }
 
+void Rajon::operator = (const Rajon &x)
+{
+	 this->Szkola1 = x.Szkola1;
+    this->Szkola2 = x.Szkola2;
+    this->Szkola3 = x.Szkola3;
+    this->inspektory = x.inspektory;
+	//this->imie_rajona = x.imie_rajona;
+    strcpy(this->imie_rajona, x.imie_rajona);
+
+}	
 int  Rajon::Total()
 {
     return Szkola1.Nauczycielej() + Szkola2.Nauczycielej() + Szkola3.Nauczycielej() + inspektory;
@@ -83,10 +100,10 @@ Szkola Rajon::Moar(){
         tmp = Szkola3;
     return tmp;
 }
-void Szkola::Init(int _studenci, int _nauczycieli)
+void Szkola::Init()
 {
-    studenci = _studenci;
-    nauczycieli = _nauczycieli;
+    studenci = 0;
+    nauczycieli = 0;
 }
 
 
@@ -101,7 +118,7 @@ void Rajon::Display(){
     printf("Количество инспекторов: ");
     printf("%d\n", inspektory);
     printf("Название района: ");
-	cout << imie_rajona << "\n";
+    printf("%s\n", imie_rajona);
 }
 void Szkola::Read()
 {
@@ -123,36 +140,29 @@ int Szkola::Nauczycielej(){
 }
 int main()
 {
-	const int N = 6;
-    Rajon jeden[N];
-	Rajon tmp;
-	Rajon tmp2;
+    Rajon jeden;
+	Rajon dwa = jeden;
+	Rajon three(jeden);
+	dwa = three;
+    jeden.Display();
+
     int ludziej;
-	int i;
-	string temp;
     double srednia;
     Szkola moar;
-    jeden[0].Init(3,2,0,1,4,0,0, "northern");
-    jeden[1].Init(4,0,3,0,0,5,6, "southern");
-    jeden[2].Init(8,0,2,0,9,0,7, "eastern");
-    jeden[3].Init(8,4,0,3,0,7,3, "western");
-    jeden[4].Init(7,0,0,0,4,0,0, "eifd");
-    jeden[5].Init(2,0,4,1,2,0,1, "kreski");
-	tmp = jeden[0];
-
-	for(i =0 ; i < N /2; i++)
-		if(tmp.Get_Imie().length() < jeden[i].Get_Imie().length())
-			tmp = jeden[i];
-	tmp2 = jeden[N/2];
-	for(i = N/2; i < N; i++)
-		if(tmp.Get_Imie().length() > jeden[i].Get_Imie().length())
-			tmp2 = jeden[i];
-	tmp.Display();
-	tmp2.Display();
-	temp = tmp2.Get_Imie();
-//	temp = temp[2] + temp[3] + temp[4];
-   	tmp.Set_Imie(tmp.Get_Imie().insert(1, temp, 2,3));
-	tmp.Display();
+    printf("введите количество учеников и преподавателей для трех школ, а так же количество инспекторов: ");
+    jeden.Read();
+    ludziej = jeden.Total();
+    printf("Всего людей, занятых в образовании в данном районе:  %d\n", ludziej);
+    moar = jeden.Moar();
+    printf("Количество учеников и учителей в школе с наибольшим отношением ученик/преподаватель: ");
+    moar.Display();
+    srednia = moar.Srednia();  
+    printf("Количество учеников на одного учителя в этой школе: %lf\n", srednia);
+    printf("Изменить название района: ");
+    jeden.Set_Imie();
+    printf("Название района стало: %s\n", jeden.Get_Imie());
+    printf("Вся информация о районе: \n");
+    jeden.Display();
 
 
 }
