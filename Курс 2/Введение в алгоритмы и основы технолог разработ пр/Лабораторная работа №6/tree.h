@@ -8,6 +8,6 @@ struct tree{
 
 struct tree *tree_init(void);
 struct tree *infixtotree(char *expr, struct tree *thetree);
-void nd(struct stack *operators, struct stack *output, struct tree *thetree);
+struct tree *nd(struct stack *operators, struct stack *output, struct tree *thetree);
 int isop(char op);
 int priority(char op1, char op2);

@@ -1,19 +1,38 @@
+/* Преобразовать алгебраическое выражение в дерево */
 
 #include "stack.h"
+#define LINELENGTH 1024
 int isop(char op);
 int priority(char op1, char op2);
 void reptree(struct tree *thetree);
-void nonreptree(struct tree *thetree);
+int nonreptree(struct tree *thetree);
 int main()
 {
+	/* открываем файл */
+	char line[LINELENGTH];
+	FILE *fp;
+    printf("введите имя файла:");
+    scanf("%s", line);
+    if((fp = fopen(line,"r")) == NULL){
+        fprintf(stderr, "Нет такого файла\n");
+        return 1;
+    }
+	/* считываем строку */
+    fgets (line, LINELENGTH, fp);
+	fclose(fp);
 	
+
+	/* cоздаем новое дерево */
 	struct tree *thetree = NULL;
 	thetree = tree_init();
-	thetree = infixtotree("(4*((2+2)-2)+1)*2", thetree);
+	
+	/* преобразуем */
+	thetree = infixtotree(line, thetree);
 
+	/* рекурсивная печать дерева*/	
 	//reptree(thetree);
+	/* нерекурсивная печать дерева */
 	nonreptree(thetree);
-	printf("\n");
 	return 0;
 
 }
@@ -46,45 +65,54 @@ int priority(char op1, char op2)
 		return 0;
 }
 
-void nonreptree(struct tree *thetree)
+int nonreptree(struct tree *thetree)
 {
- /* set current to root of binary tree */
-  	struct tree *current = thetree;
-  	struct stack buf;  /* Initialize stack s */
+	FILE *fp;
+	fp = fopen("output.txt", "w");
+  	
+	struct tree *current = thetree;
+  	struct stack buf;
 	stack_create(&buf);
 	int done = 0;
- 
-  while (!done)
-  {
-    /* Reach the left most tNode of the current tNode */
-    if(current !=  NULL)
-    {
-		if(isop(current->data))
-			printf("(");
-      stack_push(&buf, *current);
-      current = current->left;  
-    }
-    else
-    {
-      if (!is_stk_empty(&buf))
-      {
-		current = tree_init();
-        *current = stack_pop(&buf);
-		if(isop(current->data))
-			if(isop(current->left->data) || !isop( current->right->data) ){
-				printf(")");
-				printf("---='%c'\n", current->data);
 
-			}
-		printf("%c", current->data);
- 
-        /* we have visited the node and its left subtree.
-          Now, it's right subtree's turn */
-		current = current->right;
-      }
-      else
-        done = 1; 
+	/* если дерево состоит из единственного элемента */
+	if(current !=NULL){
+		fprintf(fp,"Л К П\n");
+		if( current->left == NULL &&  current->right == NULL ){
+	  		fprintf(fp,"  %c", current->data);
+			fclose(fp);
+			return 1;
+		}
+	}
+  	while (!done){
+		/* пока левый потомок не NULL - пихаем элемент в стек */
+    	if(current !=  NULL){
+      		stack_push(&buf, current);
+      		current = current->left;
+    	}else{
+
+			if (!is_stk_empty(&buf)){
+        		current = stack_pop(&buf);
+
+			if(isop(current->data)){
+				if(current->left != NULL)
+					fprintf(fp,"%c", current->left->data);
+				else
+					fprintf(fp," ");
+
+				fprintf(fp," %c", current->data);
+				
+				if(current->right != NULL)
+					fprintf(fp," %c", current->right->data);
+				else
+					fprintf(fp," ");
+				fprintf(fp,"\n");
+			}	
+			current = current->right;
+		}else
+			done = 1; /* конец работы */
     }
   }
-
+	fclose(fp);
+	return 0;
 }

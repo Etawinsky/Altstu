@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct tree vt;
+typedef struct tree *vt;
 struct stack {
     int top;        
     int numbers_size;

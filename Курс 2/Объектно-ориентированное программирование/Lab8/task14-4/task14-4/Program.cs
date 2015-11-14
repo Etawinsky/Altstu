@@ -1,215 +1,228 @@
+//20. Класс – марки. Известны страна, каталожный номер, год выпуска,
+//цена. При "сложении" страна берется из первого аргумента, номер из
+//второго. Годом выпуска является минимальный из двух годов, цена равна
+//сумме цен.Выдать список каталожных номеров марок серии «Фауна» с 
+//ценой, больше заданной.
 using System;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace task144
 {
-	class Paint
-	{
-		static  protected Exception e1; 
-		static  protected Exception e2; 
-
-		protected string name;
-		protected string manufacturer;
-		protected double price;
-		protected const double coefficient = 0.2;
-
-		public Paint(int _price, string _man, string _name)
-		{
-			price = _price;
-			manufacturer = _man;
-			name = _name;
-		}
-		public double Priceafter( int monthsince){
-			string s;
-			try{
-				if (monthsince > 12)
-					throw e1 = new Exception("Аргумент > 12"); 
-				if(monthsince < 0)
-					throw e2 = new Exception("Аргумент < 0");
-
-				for (int i = 0; i < monthsince; i++)
-					price = price * (1 - coefficient ); 
-
-			} catch (Exception e1){
-				s = e1.Message;
-				Console.WriteLine (s);
+	class Stamp{
+		protected int num,year,cost;
+		protected string country;
+		static protected double k = 0.1;
+		public double K{
+			get {
+				return k;
 			}
-			return price;
-
-		}
-		public string Name
-		{
-			get
-			{
-				return name;
-			}
-			set
-			{
-				name = value;
+			set{
+				k = value;
 			}
 		}
-
-		public string Manufacturer
-		{
-			get
-			{
-				return manufacturer;
+		public int Num{
+			get {
+				return num;
 			}
-			set
-			{
-				manufacturer = value;
+			set{
+				num = value;
 			}
 		}
-		//public int Price;
-
-		public void Display()
-		{
-			Console.WriteLine ("Название {0}", name);
-			Console.WriteLine ("Производитель {0}", manufacturer);
-			Console.WriteLine ("Цена {0}", price);
+		public int Year{
+			get {
+				return year;
+			}
+			set{
+				if (value > 1500 & value < 2015)
+					year = value;
+				else
+					year = 0;
+			}
 		}
-		public void Init(int _price)
-		{
-			price = _price;
+		public int Cost{
+			get {
+				return cost;
+			}
+			set{
+				if (value > 0)
+					cost = value;
+				else
+					cost = 1;
+			}
 		}
-
-		public double GetPrice()
-		{
-			return price;
+		public string Country{
+			get {
+				return country;
+			}
+			set{
+				country = value;
+			}
 		}
-		public Paint Add(Paint a, Paint b)
-		{
-			Paint c;
-			c = new Paint(1,"one", "two");
-			c.name = a.name;
-			c.manufacturer = b.manufacturer;
-			c.price = b.price;
-			return c;
+		public void Init(int a, int b, int c, string d){
+			num = a;
+			Year = b;
+			Cost = c;
+			country = d;
 		}
-		public override string ToString() // перегрузка встроенного метода перевода полей в строку
-		{
-			string s = "";
-			s += Convert.ToString(price) + "  " + name + manufacturer;
-			return s;
+		public Stamp add(Stamp s1,Stamp s2){
+			Stamp ret = new Stamp (1,1,1,"sad");
+			int year1,id;
+			if (s1.year > s2.year)
+				year1 = s2.year;
+			else
+				year1 = s1.year;
+			if (s1.num < s2.num)
+				id = s2.num + 1;
+			else
+				id = s1.num + 1;
+			ret.Init (id, year1, s1.cost + s2.cost, s1.country);
+			return ret;
 		}
-	}
-	class Procent:Paint{
-		public Procent(int _price, string _man, string _name, double _prim):base(_price, _man, _name)
-		{
-			prim = _prim;
-		}
-		private double prim;
-		private const double z = 0.01;
-
-		public double Priceafter( int monthsince){
-			string s;
-			try{
-				if (monthsince > 12)
-					throw e1 = new Exception("Аргумент > 12"); 
-				if(monthsince < 0)
-					throw e2 = new Exception("Аргумент < 0");
-
-				for (int i = 0; i < monthsince; i++){
-					price = price * (1 - coefficient );
-					prim = prim * (1 - z );
+		public void Read(){
+			bool f = false;
+			Console.WriteLine ("Введите ID, год, цену, страну:");
+			string[] s = Console.ReadLine().Split(new char[] { ' ', '\t' },StringSplitOptions.RemoveEmptyEntries);
+			while(!f){
+				if(f){
+					Console.WriteLine ("Введите ID повторно:");
+					s [0] = Console.ReadLine ();
 				}
-
-			} catch (Exception e1){
-				s = e1.Message;
-				Console.WriteLine (s);
+				f = int.TryParse (s [0], out num);
 			}
-			return price;
-
+			f = false;
+			while(!f){
+				if(f){
+					Console.WriteLine ("Введите год повторно:");
+					s [1] = Console.ReadLine ();
+				}
+				f = int.TryParse (s [1], out year);
+			}
+			f = false;
+			while(!f){
+				if(f){
+					Console.WriteLine ("Введите цену повторно:");
+					s [2] = Console.ReadLine ();
+				}
+				f = int.TryParse (s [2], out cost);
+			}
+			country = s [3];
 		}
-		/*
-
-		public double Priceafter(Paint x, int monthsince){
-			double price;
-			price = base.Priceafter(x, monthsince);
-			prim = prim * (1 - z );
-			return price;
-
-		}
-*/
-
-		public override string ToString() // перегрузка встроенного метода перевода полей в строку
+		public override string ToString() 
 		{
 			string s = "";
-			s += Convert.ToString(price)+ " " + Convert.ToString(prim)  + "  " + name + manufacturer;
+			s += Convert.ToString(num) + "  " + Convert.ToString(year)+" " +
+				Convert.ToString(cost) + " " + country;
 			return s;
 		}
-	}
-	class MainClass
-	{
-		static int Price<T>(T a, int monthsince) where T:Paint
-		{
-			string s;
-			try{
-				if (monthsince > 12)
-					throw a.e1 = new Exception("Аргумент > 12"); 
-				if(monthsince < 0)
-					throw a.e2 = new Exception("Аргумент < 0");
-
-				for (int i = 0; i < monthsince; i++)
-					a.price = a.price * (1 - a.coefficient ); 
-
-			} catch (Exception e1){
-				s = e1.Message;
-				Console.WriteLine (s);
-			}
-			return a.price;
+		public void Display(){
+			Console.WriteLine ("ID" + num);
+			Console.WriteLine ("Страна: " + country);
+			Console.WriteLine ("Год: " + year);
+			Console.WriteLine("Цена: "+cost);
 		}
+		public Stamp(int n,int year,int cost,string count){
+			num=n;
+			Year=year;
+			Cost=cost;
+			country=count;
+		}
+	}
+	class Col_Stamp:Stamp{
+		static private double z;
+		public Col_Stamp(int n,int year,int cost,string coun,double ou):base(n,year,cost,coun){
+			z=ou;
+		}
+		public override string ToString() 
+		{
+			string s = "";
+			s += Convert.ToString(num) + "  " + Convert.ToString(year)+" " +
+				Convert.ToString(cost) + " " + country+ " " + Convert.ToString(z);
+			return s;
+		}
+		public int Cost{
+			get {
+				return Convert.ToInt32(cost+(cost*z));
+			}
+			set{
+				if (value > 0)
+					cost = value;
+				else
+					cost = 1;
+			}
+		}
+
+	}
+	class Album{
+		private Stamp a;
+		private Col_Stamp b;
+		private int year;
+		static private double k;
+		public int cost(){
+			int max = a.Cost;
+			if(max<b.Cost)
+				max=b.Cost;
+			return max;
+		}
+		public int L_years(){
+			int max = a.Year;
+			if (max < b.Year)
+				max = b.Year;
+			if (max < year)
+				max = year;
+			return max;
+		}
+		public void Init(Stamp a,Stamp b, Stamp c, int year){
+		}
+		public void Read(){
+			a.Read();
+			b.Read();
+			Console.WriteLine("Введите год альбома:");
+			bool f = false;
+			string s  = Console.ReadLine();
+			while(!f){
+				if(f){
+					Console.WriteLine ("Введите год повторно:");
+					s = Console.ReadLine ();
+				}
+				f = int.TryParse (s, out year);
+			}
+		}
+		public void Display(){
+			Console.WriteLine ("Первая марка:");
+			a.Display();
+			Console.WriteLine ("Вторая марка:");
+			b.Display();
+
+			Console.WriteLine("Год издания альбома: " + year);
+		}
+		public int Year{
+			get{
+				return year;
+			}
+			set{
+				if (value > 1500 & value < 2015)
+					year = value;
+				else
+					year = 0;
+			}
+		}	
+
+	}
+	class MainClass{
+		static double cost_of_n <T>(T i,int year) where T:Stamp{
+			double a = i.Cost;
+			for(int j = 0; j<year;j++){
+				a = a+a*i.K;
+			}
+			return a;
+		}
+		public delegate double Coost(Stamp i, int year);
 		public static void Main (string[] args)
 		{
-			Procent[] a = new Procent[4];
-
-			int i;
-			for (i = 0; i < 4; i++)
-				a [i] = new Procent (i,"Y","z",i+2);
-
-			a[0].Init (24);
-			a[1].Init (45);
-			a[0].Name = "Красная";
-			a[0].Manufacturer = "РЗК";
-
-			a[1].Name = "Синяя";
-			a[1].Manufacturer = "КЗК";
-
-			a[0].Display ();
-			Console.WriteLine ();
-
-			string tmp = a[0].Manufacturer;
-			a[2].Init (44);
-			a[2].Manufacturer = tmp;
-			a[2].Name = "Белая";
-			a[2].Display ();
-			Console.WriteLine ();
-
-
-
-			string s = "";
-			int number;
-			Console.Write ("Введите цену:");
-			s = Console.ReadLine ();
-			number = Convert.ToInt32 (s);
-			Console.WriteLine (a [0]);
-			double test; 
-			try{
-				test = a[2].Priceafter (a [2], 14);
-				Console.WriteLine (test);
-
-
-			}catch(Exception e2){
-				s = e2.Message;
-				Console.WriteLine (s);
-			}
-
-
-
+			Coost a = cost_of_n;
+			Col_Stamp c=new Col_Stamp(1, 1, 1, "23", 0.12);
+			Stamp b=new Stamp(2, 2, 2, "asd");
+			double res = a (b, 10);
+			Console.WriteLine(cost_of_n(c,10)+" "+cost_of_n(b,10)+" "+res);
 		}
 	}
 }
