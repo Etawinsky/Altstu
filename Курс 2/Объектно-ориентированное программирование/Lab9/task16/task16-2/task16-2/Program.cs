@@ -5,7 +5,7 @@ using System.Text;
 
 namespace task162
 {
-	class Paint  
+	class Paint: IComparable
 	{
 
 		public string name;
@@ -63,6 +63,24 @@ namespace task162
 		{
 			return price;
 		}
+		virtual public int AllSum(){
+			return price;
+		}
+
+		public int CompareTo(object rhs){
+			return 4;
+		}
+
+		public int Compare(object left, object right){
+			Paint lef = (Paint)left;
+			Paint righ = (Paint)right;
+			if (lef.AllSum () < righ.AllSum ())
+				return -1;
+			else if (lef.AllSum () > righ.AllSum ())
+				return 1;
+			else
+				return 0;
+		}
 	}
 	class Store: Paint   {
 
@@ -78,19 +96,8 @@ namespace task162
 		}
 		private int allsum;
 
-		public int Allsum
-		{
-			get
-			{
-				return Allsum;
-			}
-			set
-			{
-				allsum = value;
-			}
-		}
 
-		public int AllSum(){
+		override public int AllSum(){
 			allsum = p1.GetPrice() + p2.GetPrice()+ p3.GetPrice();
 			return allsum;
 		}
@@ -108,9 +115,11 @@ namespace task162
 
 		override public void Display()
 		{
+			Console.WriteLine("_______");
 			p1.Display ();
-			p1.Display ();
-			p1.Display ();
+			p2.Display ();
+			p3.Display ();
+			Console.WriteLine("_______");
 		}
 	}
 
@@ -145,6 +154,8 @@ namespace task162
 			one.Add (qu);
 			one.Add (qr);
 			one.Sort ();
+
+
 			foreach (Object fe in one) {
 				Paint ty = fe as Paint;
 				ty.Display ();	

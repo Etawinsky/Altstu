@@ -40,7 +40,7 @@ class task11_2 {
 			el.Display();
 			System.out.println("");
 		}
-		System.out.println("boom bitch");
+		System.out.println("________");
 		for(dot el:b){
 			el.Display();
 			System.out.println("");
